@@ -23,14 +23,27 @@ namespace ConsoleApp1
 			Console.WriteLine( "Please enter your bearer token value :" );
 			var token = Console.ReadLine();
 
+			Console.Clear();
+
+			Console.WriteLine( "Getting Flights" );
+
 			using ( var client = new B2B( filter , token ) )
 			{
 				var flights = client.GetAirportArrivals( airportId );
+				Console.Clear();
 				for ( int i = 0 ; i < 10 && i< flights.Count ; i++ )
 				{
 					Console.WriteLine( $@"Flight {flights[ i ].FlightId} arriving" );
 				}
 			}
+
+			Console.WriteLine();
+			Console.WriteLine();
+			Console.WriteLine();
+			Console.WriteLine( "Get Complete" );
+			Console.WriteLine();
+			Console.WriteLine();
+			Console.WriteLine();
 			Console.WriteLine( "Hit Enter to Exit" );
 			Console.ReadLine();
 		}
