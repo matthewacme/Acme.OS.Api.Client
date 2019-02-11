@@ -12,6 +12,14 @@ namespace ConsoleApp1
 			Console.Write( "Enter Airport Id > " );
 			var airportId = Console.ReadLine();
 
+			Console.Write( "Production Call? [T|F] (default False) > " );
+			var isProd = false;
+			var prodResponse = Console.ReadLine();
+			if ( !string.IsNullOrWhiteSpace( prodResponse ) && ( prodResponse.StartsWith( 't' ) || prodResponse.StartsWith( 'T' ) ) )
+			{
+				isProd = true;
+			}
+
 			Console.Write( "Filter out Non-Commercial Flights? [T|F] (default True) > " );
 			var filter = true;
 			var filterResponse= Console.ReadLine();
@@ -27,13 +35,20 @@ namespace ConsoleApp1
 
 			Console.WriteLine( "Getting Flights" );
 
-			using ( var client = new B2B( filter , token ) )
+			using ( var client = new B2B( isProd , token ) )
 			{
-				var flights = client.GetAirportArrivals( airportId );
-				Console.Clear();
-				for ( int i = 0 ; i < 10 && i< flights.Count ; i++ )
+				try
 				{
-					Console.WriteLine( $@"Flight {flights[ i ].FlightId} arriving" );
+					var flights = client.GetAirportArrivals( airportId, filter );
+					Console.Clear();
+					for ( int i = 0 ; i < 10 && i< flights.Count ; i++ )
+					{
+						Console.WriteLine( $@"Flight {flights[ i ].FlightId} arriving" );
+					}
+				}
+				catch ( Exception exc )
+				{
+					Console.WriteLine( $@"Encountered Exception => {exc.Message}" );
 				}
 			}
 
